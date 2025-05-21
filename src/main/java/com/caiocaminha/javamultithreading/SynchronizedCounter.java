@@ -17,6 +17,7 @@ public class SynchronizedCounter {
 
     public int getCount() {
         lock.lock();
+        var condition = lock.newCondition();
         try {
             return counter;
         } finally {
@@ -42,6 +43,7 @@ public class SynchronizedCounter {
                 counter--;
             } finally {
                 lock.unlock();
+                notifyAll();
             }
         } else {
             System.out.println("Failed to acquire lock");
