@@ -1,7 +1,15 @@
 package com.caiocaminha.javamultithreading.basic;
 
+import com.caiocaminha.javamultithreading.SynchronizedCounter;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 public class ThreadCreatingTesting {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
         Thread thread = new Thread(() -> {
             throw new RuntimeException("Intentional Exception thrown");
         });
@@ -19,5 +27,12 @@ public class ThreadCreatingTesting {
         });
 
         thread.start();
+
+        //this is often used for concurrent tasks
+        var completableFuture = CompletableFuture.runAsync(() -> {
+            System.out.println(new SynchronizedCounter().getCount());
+        });
+
+        completableFuture.join();
     }
 }
