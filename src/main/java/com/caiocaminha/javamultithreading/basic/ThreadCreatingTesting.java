@@ -28,11 +28,5 @@ public class ThreadCreatingTesting {
 
         thread.start();
 
-        //this is often used for concurrent tasks
-        var completableFuture = CompletableFuture.runAsync(() -> {
-            System.out.println(new SynchronizedCounter().getCount());
-        });
-
-        completableFuture.join();
     }
 }
