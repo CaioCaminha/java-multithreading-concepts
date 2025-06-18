@@ -1,4 +1,4 @@
-package com.caiocaminha.javamultithreading.guardedblock;
+package com.caiocaminha.javamultithreading.waitNotifyAllExamples;
 
 public class Drop {
     private String message;

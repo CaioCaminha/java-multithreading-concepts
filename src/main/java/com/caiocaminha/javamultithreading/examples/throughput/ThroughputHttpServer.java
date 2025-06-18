@@ -25,6 +25,11 @@ public class ThroughputHttpServer {
         );
 
         server.createContext("/search", new WordCounterHandler(text)); //passing a custom HttpHandler
+        /***
+         * Creating an instance of ThreadPoolExecutor which extends Executor
+         * Then setting the Executor for HttpServer before starting the server
+         * This way the requests will be handled in tasks that are processed by the Worker threads
+         */
         Executor executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
         server.setExecutor(executor);
         server.start();
