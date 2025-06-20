@@ -1,11 +1,15 @@
 package com.caiocaminha.javamultithreading.examples;
 
+import java.util.Objects;
+
 public class DoubleCheckedLockingExample {
 
     public class BrokenSingleton {
         private static BrokenSingleton instance;
 
         public static BrokenSingleton getInstance() {
+            //The Idea is to only go through the process of synchronization if the instance is really null
+            // synchronized block has a big overhead + it's blocking since it's acquiring BrokenSingleton's lock
             if( instance == null ) { // first check - UnSynchronized
                 synchronized (BrokenSingleton.class) {
                     if(instance == null ) { // Second Check - Synchronized
@@ -21,7 +25,7 @@ public class DoubleCheckedLockingExample {
                          *  Another thread can see a non-null but partially constructed object. That's a classic
                          *  race condition and causes undefined behavior.
                          */
-                        instance = new BrokenSingleton();
+                        //instance = new BrokenSingleton();
                     }
                 }
             }
@@ -45,11 +49,38 @@ public class DoubleCheckedLockingExample {
             if( instance == null ) {
                 synchronized (CorrectSingleton.class) {
                     if(instance == null ) {
-                        instance = new CorrectSingleton();
+                        //instance = new CorrectSingleton();
                     }
                 }
             }
             return instance;
+        }
+    }
+
+    /**
+     * This is the faster approach - JVM treats enum constructors as implicitly thread-safe during initialization.
+     * Enum instances are static final fields and their constructor is atomic.
+     * Plus doesn't have the memory barriers as the volatile field.
+     * And doesn't have the overhead of acquiring and releasing a lock.
+     */
+    public static class Singleton {
+
+        private enum Holder {
+            INSTANCE;
+
+            private final Singleton instance;
+
+            Holder() {
+                instance = new Singleton();
+            }
+
+            private Singleton getInstance() {
+                return this.instance;
+            }
+        }
+
+        public static Singleton getInstance() {
+            return Holder.INSTANCE.getInstance();
         }
     }
 

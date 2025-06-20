@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MultithreadingComparison {
     public static final String SOURCE_FILE = "./resources/image.jpg";
@@ -13,6 +14,20 @@ public class MultithreadingComparison {
     public static void main(String[] args) throws IOException {
         BufferedImage originalImage = ImageIO.read(new File(SOURCE_FILE));
         BufferedImage resultImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+        System.out.println(
+                new AtomicInteger(19).hashCode()
+        );
+
+    }
+
+
+    public static class HashCodeExample {
+        public static  int hashCodeCalculator(Object o) {
+            int result = 1;
+
+            return 31 * result + (o == null ? 0 : o.hashCode());
+        }
     }
 
     public static void recolorImage(
