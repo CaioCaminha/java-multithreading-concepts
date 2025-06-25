@@ -266,6 +266,35 @@ class ProductReviewsService {
             thread.start();
         }
     }
+
+
+    public static class TestingConditionVariable{
+        private Lock lock = new ReentrantLock();
+        private Condition condition = lock.newCondition();
+        String username = null, password = null;
+
+        public void execute() throws InterruptedException {
+            lock.lock();
+            try{
+                while(username == null || password == null) {
+                    condition.await();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        public void uiExecute() throws InterruptedException {
+            lock.lock();
+            try {
+                username = "caio";
+                password = "cainhoDosGames";
+                condition.signal();
+            }finally {
+                lock.unlock();
+            }
+        }
+    }
 }
 
 
