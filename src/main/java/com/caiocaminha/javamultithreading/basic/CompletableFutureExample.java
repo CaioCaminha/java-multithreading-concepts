@@ -9,12 +9,18 @@ public class CompletableFutureExample {
     public static void main(String[] args) {
         //this is often used for concurrent tasks
         var completableFuture = CompletableFuture.runAsync(() -> {
-            System.out.println(new SynchronizedCounter().getCount());
+            name();
         });
 
 
+        completableFuture.thenAccept( promise -> {
 
-        completableFuture.join();
+                }
+        );
+    }
+
+    private static String name() {
+        return "caio";
     }
 
 }
