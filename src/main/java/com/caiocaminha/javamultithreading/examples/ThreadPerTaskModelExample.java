@@ -21,27 +21,13 @@ public class ThreadPerTaskModelExample {
     }
 
     private static void performTasks() {
-        try (ExecutorService executorService = Executors.newFixedThreadPool(1000)) {
+        try (ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
             for(int i = 0; i < NUMBER_OF_TASKS; i++) {
                 executorService.submit(ThreadPerTaskModelExample::blockingOperation);
             }
         }
     }
 
-    private static void testing() {
-        Thread[] threads = new Thread[10];
-        for (int i = 0; i < 10; i++) {
-            Thread newThread =  new Thread(ThreadPerTaskModelExample::blockingOperation);
-
-            newThread.setDaemon(true);
-
-            threads[i] = newThread;
-        }
-
-        for (Thread thread : threads) {
-            thread.start();
-        }
-    }
 
 
     private static void blockingOperation() {
